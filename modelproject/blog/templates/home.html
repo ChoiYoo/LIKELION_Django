@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {% if user.is_authenticated %}
+    <br>
+      <span class="top_con" style="float: right;">{{user.nickname}}님 안녕하세요!</span>      
+    {% endif %}
+    <header class="py-5 bg-light border-bottom mb-4" style="background-color: white;">
+      <div class="container">
+          <div class="text-center my-5">
+              <h1 class="fw-bolder">Welcome to Pet Diary</h1>
+              <p class="lead mb-0">여러분의 반려동물을 여기에서 자랑해보세요</p>
+          </div>
+      </div>
+    </header>
+    <!-- Page content-->
+    <div class="container" style="width: 900px;">
+      <div class="col-lg-6">
+        <!-- Search widget-->
+        <div class="card mb-4" id="search" style="float: left;">
+            <div class="card-header">Search</div>
+            <div class="card-body">
+                <div class="input-group">
+                    <form action="{% url 'home' %}">
+                      <input class="search_box" type="text" name="query" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
+                      <button class="btn_box" type="submit">검색</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4" id="categories" style="float: left;">
+          <div class="card-header">Categories</div>
+          <div class="card-body">
+            <div class="input-group">
+              <form action="{% url 'home' %}">
+                <select class="search_box" name="typecheck">
+                  <option disabled selected>-----</option>
+                  <option value="Dog">Dog</option>
+                  <option value="Cat">Cat</option>
+                  <option value="Etc">Etc</option>
+                </select>
+                <button class="btn_box" type="submit">검색</button>
+              </form>
+          </div>
+      </div>
+      </div>
+      <div class="row">
+          <!-- Blog entries-->
+          <div class="col-lg-8">
+            <div class="row">
+              <div class="col-lg-6">
+              <!-- Featured blog post-->
+              {% for blog in blogs%}
+              {% if forloop.counter|divisibleby:2 %}
+              <div class="card mb-4" id="post1">
+                  {% if blog.image %}
+                  <a href="{% url 'blog:detail' blog.id %}"><img class="card-img-top" src="{{blog.image.url}}" alt="..." style="width: 398px; height: 398px;"/></a>
+                  {% else %}
+                  <a href="{% url 'blog:detail' blog.id %}"><img class="card-img-top" src="{% static 'white.JPG' %}" alt="..." style="width: 398px; height: 398px;"/></a>
+                  {% endif %}
+                  <div class="card-body">
+                      <div class="small text-muted">{{blog.time}}</div>
+                      <h2 class="card-title">{{ blog.title }}</h2>
+                      <a class="btn btn-primary" href="{% url 'blog:detail' blog.id %}">Read more →</a>
+                  </div>
+              </div>
+              {% else %}
+              <div class="card mb-4" id="post2">
+                {% if blog.image %}
+                <a href="#!"><img class="card-img-top" src="{{blog.image.url}}" alt="..." style="width: 398px; height: 398px;"/></a>
+                {% else %}
+                  <a href="#!"><img class="card-img-top" src="{% static 'white.JPG' %}" alt="..." style="width: 398px; height: 398px;"/></a>
+                {% endif %}
+                <div class="card-body">
+                    <div class="small text-muted">{{blog.time}}</div>
+                    <h2 class="card-title">{{ blog.title }}</h2>
+                    <a class="btn btn-primary" href="{% url 'blog:detail' blog.id %}">Read more →</a>
+                </div>
+            </div>
+              {% endif %}
+              {%endfor %}
+            </div>
+            </div>
+              <nav aria-label="Pagination">
+                  <hr class="my-0" />
+                  <ul class="pagination justify-content-center my-4">
+                      {% if blogs.has_previous %}
+                      <li class="page-item"><a class="page-link" href="?page=1" tabindex="-1" aria-disabled="true">처음</a></li>
+                      <li class="page-item" aria-current="page"><a class="page-link" href="?page={{blogs.previous_page_number}}">이전</a></li>
+                      {% endif %}
+                      <span class="page_num">{{blogs.number}}</span>
+                      <span class="page_num">of</span>
+                      <span class="page_num">{{blogs.paginator.num_pages}}</span>
+                      {% if blogs.has_next %}
+                      <li class="page-item"><a class="page-link" href="?page={{blogs.next_page_number}}">다음</a></li>
+                      <li class="page-item"><a class="page-link" href="?page={{blogs.paginator.num_pages}}">마지막</a></li>
+                      {% endif %}
+                  </ul>
+              </nav>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock %}

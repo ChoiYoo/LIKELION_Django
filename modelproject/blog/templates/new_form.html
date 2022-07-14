@@ -1,0 +1,14 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="new_box">
+<h1>New Pet Diary 📝</h1>
+<form action="{%url 'blog:create_form'%}" method="post" enctype="multipart/form-data">
+    {%csrf_token%}
+
+    {{form.as_p}}
+    <button class="btn_new" type='submit'>작성하기</button>
+</form>
+</div>
+{% endblock %}

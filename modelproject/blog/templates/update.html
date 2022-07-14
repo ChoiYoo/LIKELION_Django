@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="up_box" style="font-family: 'Jua', sans-serif; width: 900px; margin: 0 auto; margin-top: 60px;">
+<form action="{% url 'blog:update' blog.id %}" method = "POST">
+    {% csrf_token %}
+<h4>제목: </h4>
+<input class="form-control" type="text" name="title" value={{blog.title}}>
+<br>
+<br>
+<h4>본문: </h4>
+<textarea class="form-control" name="body" cols="30" rows="10">{{blog.body}}</textarea><br><br>
+{% if blog.type == "Dog" %}
+<select class="search_box" name="typecheck">
+    <option value="Dog" selected>Dog</option>
+    <option value="Cat" >Cat</option>
+    <option value="Etc">Etc</option>
+  </select>
+  {% endif %}
+{% if blog.type == "Cat" %}
+<select class="search_box" name="typecheck">
+    <option value="Dog" >Dog</option>
+    <option value="Cat" selected>Cat</option>
+    <option value="Etc">Etc</option>
+  </select>
+  {% endif %}
+  {% if blog.type == "Etc" %}
+<select class="search_box" name="typecheck">
+    <option value="Dog" >Dog</option>
+    <option value="Cat" >Cat</option>
+    <option value="Etc" selected>Etc</option>
+  </select>
+  {% endif %}
+  <button class="btn_box" type="submit">검색</button><br><br>
+<input type="submit" value="완료" style="border-top: none; border-left: none; border-right: none; border-bottom: 3px solid #A0A0FF; background-color: white;">
+</form>
+
+</div>
+{% endblock %}

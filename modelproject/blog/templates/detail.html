@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+  {% block content %}
+  <div class="container mt-5" style="width: 900px;">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Post content-->
+            <article>
+                <!-- Post header-->
+                <header class="mb-4">
+                    <!-- Post title-->
+                    <h1 class="fw-bolder mb-1">{{ blog.title }}</h1>
+                    <!-- Post meta content-->
+                    <div class="text-muted fst-italic mb-2">{{ blog.time }}</div>
+                    <div class="text-muted fst-italic mb-2">{{ blog.user.username }}</div>
+                </header>
+                <!-- Preview image figure-->
+                {% if blog.image %}
+                <figure class="mb-4"><img class="img-fluid rounded" src="{{blog.image.url}}" alt="..." style="width: 600px;"/></figure>
+                {% endif %}
+                <!-- Post content-->
+                <section class="mb-5">
+                    <p class="fs-5 mb-4">{{ blog.body | linebreaksbr }}</p>
+                </section>
+            </article>
+            <div class="ta">
+            <a href="{% url 'home' %}">돌아가기</a>
+            {% if blog.user == user %}
+            <a href="{% url 'blog:update' blog.id %}">수정하기 </a>
+            <a href="{% url 'blog:delete' blog.id%}">Delete Post </a>   
+            {% endif %}
+            </div>
+            <br>
+            <!-- Comments section-->   
+            <section class="mb-5">
+                <div class="card2 bg-light">
+                    <div class="card-body">
+                        <!-- Comment form-->
+                        <form class="mb-4" action="{% url 'blog:create_comment' blog.id %}" method="POST">
+                            {% csrf_token %}
+                            {{form}}
+                            <button class="btn_com" type="submit">댓글 작성</button>
+                        </form>
+                        <!-- Comment with nested comments-->
+                        {% for comment in blog.comment_set.all %}
+                        <li style="list-style-type: none;">
+                        <div class="d-flex mb-4">
+                            <!-- Parent comment-->
+                            <div class="flex-shrink-0"></div>
+                            <div class="ms-3">
+                                {% if comment.user is null%}
+                                <div class="fw-bold">익명 <span style="font-size: 5px;">{{comment.time}}</span></div>
+                                {% else %}
+                                
+                                <div class="fw-bold">{{comment.user.username}}
+                                  {% if comment.user == user %}
+                                  <span>(나)</span>
+                                  {% endif %}
+                                  <span style="font-size: 5px;">{{comment.time}}</span></div>
+                                {% endif %}
+                                {{comment.content}}
+                            </div>
+                            {% if comment.user == user %}
+                            <a href="{% url 'blog:delete_comment' comment.id %}">
+                              <input class="btn_del" type="button" value="delete"/></a>
+                            {% endif %}</li>
+                        {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+  {% endblock %}
