@@ -1,6 +1,6 @@
 @import "styles.css";
 
-.navbar-brand, .nav-link, .fw-bolder, .lead, .card, .page_num, .page-link, .new_box, .login_box, .signup_box, .col-lg-8, .top_con{
+body{
     font-family: 'Jua', sans-serif;
 }
 

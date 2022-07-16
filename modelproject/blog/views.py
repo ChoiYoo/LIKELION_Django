@@ -25,13 +25,21 @@ def detail(request, id):
     return render(request, 'detail.html', {'blog' : blog, 'form':form})
 
 def update(request, id):
-    blog = Blog.objects.get(id = id)
+    blog = get_object_or_404(Blog, pk=id)
     if request.method == 'POST':
-        blog.title = request.POST['title']
-        blog.body  = request.POST['body']
-        blog.save()
-        return redirect('blog:detail', blog.id)
-    return render(request, 'update.html', {'blog' : blog})
+        form = BlogForm(request.POST, request.FILES, instance=blog)
+        if form.is_valid():
+            blog = form.save(commit=False)
+            blog.time = timezone.now()
+            if request.user.is_authenticated:
+                blog.user = request.user
+            blog.save()
+            return redirect('blog:detail', id = blog.pk)
+        else:
+            return redirect('home')
+    else:
+        form =  BlogForm(instance=blog)
+        return render(request, 'update.html', {'form' : form})
 
 def delete(request, id):
     blog = Blog.objects.get(id=id)
