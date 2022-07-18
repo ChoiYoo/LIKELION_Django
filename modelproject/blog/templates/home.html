@@ -84,17 +84,45 @@
               <nav aria-label="Pagination">
                   <hr class="my-0" />
                   <ul class="pagination justify-content-center my-4">
+                      {% if query %}
+                      {% if blogs.has_previous %}
+                      <li class="page-item"><a class="page-link" href="?query={{query}}&page=1" tabindex="-1" aria-disabled="true">처음</a></li>
+                      <li class="page-item" aria-current="page"><a class="page-link" href="?query={{query}}&page={{blogs.previous_page_number}}">이전</a></li>
+                      {% endif %}
+                      {% else %}
+                      {% if typecheck %}
+                      {% if blogs.has_previous %}
+                      <li class="page-item"><a class="page-link" href="?typecheck={{typecheck}}&page=1" tabindex="-1" aria-disabled="true">처음</a></li>
+                      <li class="page-item" aria-current="page"><a class="page-link" href="?typecheck={{typecheck}}&page={{blogs.previous_page_number}}">이전</a></li>
+                      {% endif %}
+                      {% else %}
                       {% if blogs.has_previous %}
                       <li class="page-item"><a class="page-link" href="?page=1" tabindex="-1" aria-disabled="true">처음</a></li>
                       <li class="page-item" aria-current="page"><a class="page-link" href="?page={{blogs.previous_page_number}}">이전</a></li>
                       {% endif %}
+                      {% endif %}{% endif %}
+
                       <span class="page_num">{{blogs.number}}</span>
                       <span class="page_num">of</span>
                       <span class="page_num">{{blogs.paginator.num_pages}}</span>
+
+                      {% if query %}
+                      {% if blogs.has_next %}
+                      <li class="page-item"><a class="page-link" href="?query={{query}}&page={{blogs.next_page_number}}">다음</a></li>
+                      <li class="page-item"><a class="page-link" href="?query={{query}}&page={{blogs.paginator.num_pages}}">마지막</a></li>
+                      {% endif %}
+                      {% else %}
+                      {% if typecheck %}
+                      {% if blogs.has_next %}
+                      <li class="page-item"><a class="page-link" href="?typecheck={{typecheck}}&page={{blogs.next_page_number}}">다음</a></li>
+                      <li class="page-item"><a class="page-link" href="?typecheck={{typecheck}}&page={{blogs.paginator.num_pages}}">마지막</a></li>
+                      {% endif %}
+                      {% else %}
                       {% if blogs.has_next %}
                       <li class="page-item"><a class="page-link" href="?page={{blogs.next_page_number}}">다음</a></li>
                       <li class="page-item"><a class="page-link" href="?page={{blogs.paginator.num_pages}}">마지막</a></li>
                       {% endif %}
+                      {% endif %}{% endif %}
                   </ul>
               </nav>
           </div>

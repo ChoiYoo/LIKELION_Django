@@ -6,18 +6,18 @@ from django.core.paginator import Paginator
 
 # Create your views here.
 def home(request):
-    blogs = Blog.objects.order_by('-time')
-
     query = request.GET.get('query')
-    if query:
-        blogs = Blog.objects.filter(title__contains=query)
     typecheck = request.GET.get('typecheck')
-    if typecheck:
-        blogs = Blog.objects.filter(type__contains=typecheck)
+    if query:
+        blogs = Blog.objects.filter(title__contains=query).order_by('-time')
+    elif typecheck:
+        blogs = Blog.objects.filter(type__contains=typecheck).order_by('-time')
+    else:
+        blogs = Blog.objects.order_by('-time')
     paginator = Paginator(blogs, 4)
     page = request.GET.get('page')
     paginated_blogs = paginator.get_page(page)
-    return render(request, 'home.html', {'blogs' : paginated_blogs})
+    return render(request, 'home.html', {'blogs' : paginated_blogs, 'query': query, 'typecheck':typecheck})
 
 def detail(request, id):
     blog = get_object_or_404(Blog, pk = id)
