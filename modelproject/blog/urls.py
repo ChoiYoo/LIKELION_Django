@@ -12,3 +12,5 @@ urlpatterns = [
     path('<int:id>/comments/', views.create_comment, name='create_comment'),
     path('<int:id>/delete_comment/', views.delete_comment, name='delete_comment'),
 ]
+
+#확인용
