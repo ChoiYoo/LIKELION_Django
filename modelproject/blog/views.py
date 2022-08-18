@@ -4,7 +4,6 @@ from .forms import BlogForm, CommentForm
 from .models import Blog, Comment
 from django.core.paginator import Paginator
 
-# Create your views here.
 def home(request):
     query = request.GET.get('query')
     typecheck = request.GET.get('typecheck')
